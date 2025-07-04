@@ -1,9 +1,19 @@
 #!/bin/sh
-# rntctl - Minimal Runit service manager
+# rntctl - Minimal Runit service manager for Void & Artix Linux
 # License: MIT
-# Made by Gurlagan Singh Linux Guru Lagan
-SV_DIR="/etc/sv"
-RUNSVDIR="/var/service"
+# I am a lazy programmer and don't add much comments so it is onto you to understand the code
+# Auto-detect service and supervision directories
+if [ -d /etc/sv ] && [ -d /var/service ]; then
+    SV_DIR="/etc/sv"
+    RUNSVDIR="/var/service"
+elif [ -d /etc/runit/sv ] && [ -d /run/runit/service ]; then
+    SV_DIR="/etc/runit/sv"
+    RUNSVDIR="/run/runit/service"
+else
+    echo "Error: Unsupported Runit layout."
+    echo "Please manually edit SV_DIR and RUNSVDIR in the script."
+    exit 1
+fi
 
 usage() {
     echo "Usage: $0 [start|enable|disable|status] <service>"
@@ -17,6 +27,7 @@ SERVICE="$2"
 SERVICE_PATH="$SV_DIR/$SERVICE"
 ENABLED_PATH="$RUNSVDIR/$SERVICE"
 
+# Check service exists
 [ ! -d "$SERVICE_PATH" ] && {
     echo "Service '$SERVICE' not found in $SV_DIR."
     exit 2
@@ -24,7 +35,7 @@ ENABLED_PATH="$RUNSVDIR/$SERVICE"
 
 case "$ACTION" in
     start)
-        echo "Starting $SERVICE (without enabling)..."
+        echo "Starting $SERVICE (without enabling at boot)..."
         runsv "$SERVICE_PATH" &
         ;;
     enable)
@@ -49,7 +60,7 @@ case "$ACTION" in
         else
             echo "Enabled: no"
         fi
-        sv status "$SERVICE" 2>/dev/null || echo "Not running or no supervision data."
+        sv status "$SERVICE" 2>/dev/null || echo "Not running or no supervision info."
         ;;
     *)
         usage
