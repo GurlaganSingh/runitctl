@@ -45,9 +45,9 @@ rntctl status dhcpcd
 
 📍 Notes
 
-Only tested on Void Linux.
+Only tested on Void Linux and Artix linux.
 
-Assumes service definitions in /etc/sv and runsvdir in /var/service.
+Assumes service definitions in /etc/sv and runsvdir in /var/service or /run/runit/service.
 
 Does not handle custom runsvdir paths — if you want that, fork and enhance!
 
