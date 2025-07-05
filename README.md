@@ -21,8 +21,8 @@ It brings familiar `start`, `enable`, `disable`, and `status` functionality to V
 Clone the repo and copy `rntctl` somewhere in your `$PATH`:
 
 ```sh
-git clone https://github.com/GurlaganSingh/rntctl.git
-cd rntctl
+git clone https://github.com/GurlaganSingh/runitctl.git
+cd runitctl
 chmod +x rntctl
 sudo cp rntctl /usr/local/bin/
 ```
